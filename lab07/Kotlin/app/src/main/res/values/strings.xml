@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">lab07</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_java">Java</string>
+    <string name="action_kotlin">Kotlin</string>
+    <string name="action_python">Python</string>
+    <string name="selected_item">Вы выбрали: %1$s</string>
+</resources>

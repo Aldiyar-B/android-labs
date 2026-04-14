@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.Lab07" parent="Theme.Material3.DayNight">
+        <!-- Customize your light theme here -->
+    </style>
+
+    <style name="Theme.Lab07" parent="Base.Theme.Lab07" />
+
+</resources>
