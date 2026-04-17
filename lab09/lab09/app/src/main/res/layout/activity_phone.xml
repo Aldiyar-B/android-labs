@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/btnPhone1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+7 999 111-11-11"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnPhone2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+7 999 222-22-22"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnPhone3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+7 999 333-33-33"/>
+</LinearLayout>
