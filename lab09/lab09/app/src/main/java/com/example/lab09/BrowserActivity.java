@@ -1,20 +1,21 @@
 package com.example.lab09;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BrowserActivity extends AppCompatActivity {
 
     private WebView webView;
+    private EditText urlEditText;
+    private Button btnBack, btnGo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,18 +23,61 @@ public class BrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_browser);
 
         webView = findViewById(R.id.webView);
+        urlEditText = findViewById(R.id.urlEditText);
+        btnBack = findViewById(R.id.btnBack);
+        btnGo = findViewById(R.id.btnGo);
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
 
-        webView.setWebViewClient(new MyWebViewClient());
+        String url = getIntent().getStringExtra("url");
 
-        Uri data = getIntent().getData();
-        if (data != null) {
-            webView.loadUrl(data.toString());
+        if (url != null && !url.isEmpty()) {
+            loadPage(url);
         } else {
-            webView.loadUrl("https://nstu.ru");
+            urlEditText.setText("local://webview");
+            webView.loadDataWithBaseURL(
+                    null,
+                    "<html><body><h1>Собственный браузер</h1>" +
+                            "<p>Страница открыта внутри WebView</p>" +
+                            "</body></html>",
+                    "text/html",
+                    "UTF-8",
+                    null
+            );
         }
+
+        btnGo.setOnClickListener(v -> {
+            String newUrl = urlEditText.getText().toString().trim();
+
+            if (newUrl.isEmpty()) {
+                Toast.makeText(this, "Введите адрес сайта", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!newUrl.startsWith("http://") && !newUrl.startsWith("https://")) {
+                newUrl = "https://" + newUrl;
+            }
+
+            loadPage(newUrl);
+        });
+
+        btnBack.setOnClickListener(v -> {
+            if (webView.canGoBack()) {
+                webView.goBack();
+            } else {
+                finish();
+            }
+        });
+
+        urlEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                btnGo.performClick();
+                return true;
+            }
+            return false;
+        });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -47,40 +91,8 @@ public class BrowserActivity extends AppCompatActivity {
         });
     }
 
-    private static class MyWebViewClient extends WebViewClient {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(@NonNull WebView view,
-                                                @NonNull WebResourceRequest request) {
-            view.loadUrl(request.getUrl().toString());
-            return true;
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-
-        @Override
-        public void onReceivedError(@NonNull WebView view,
-                                    @NonNull WebResourceRequest request,
-                                    @NonNull WebResourceError error) {
-            Toast.makeText(view.getContext(),
-                    "Ошибка загрузки страницы",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public void onReceivedError(WebView view,
-                                    int errorCode,
-                                    String description,
-                                    String failingUrl) {
-            Toast.makeText(view.getContext(),
-                    "Ошибка загрузки страницы: " + description,
-                    Toast.LENGTH_SHORT).show();
-        }
+    private void loadPage(String url) {
+        urlEditText.setText(url);
+        webView.loadUrl(url);
     }
 }

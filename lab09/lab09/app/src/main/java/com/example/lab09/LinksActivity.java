@@ -1,6 +1,5 @@
 package com.example.lab09;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,16 +22,16 @@ public class LinksActivity extends AppCompatActivity {
         btnLink2 = findViewById(R.id.btnLink2);
         btnLink3 = findViewById(R.id.btnLink3);
 
-        btnLink1.setOnClickListener(v -> chooseBrowser("https://example.com"));
-        btnLink2.setOnClickListener(v -> chooseBrowser("https://www.google.com"));
-        btnLink3.setOnClickListener(v -> chooseBrowser("https://nstu.ru"));
+        btnLink1.setOnClickListener(v -> chooseBrowser("http://nstu.ru"));
+        btnLink2.setOnClickListener(v -> chooseBrowser("http://ya.ru"));
+        btnLink3.setOnClickListener(v -> chooseBrowser("http://example.com"));
     }
 
     private void chooseBrowser(String url) {
         String[] options = {"Собственный браузер", "Системный браузер"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Выберите, чем открыть ссылку");
+        builder.setTitle("Выберите способ открытия");
         builder.setItems(options, (dialog, which) -> {
             if (which == 0) {
                 openInMyBrowser(url);
@@ -45,15 +44,16 @@ public class LinksActivity extends AppCompatActivity {
 
     private void openInMyBrowser(String url) {
         Intent intent = new Intent(LinksActivity.this, BrowserActivity.class);
-        intent.setData(Uri.parse(url));
+        intent.putExtra("url", url);
         startActivity(intent);
     }
 
     private void openInSystemBrowser(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
         try {
             startActivity(intent);
-        } catch (ActivityNotFoundException e) {
+        } catch (Exception e) {
             Toast.makeText(this, "На устройстве нет браузера", Toast.LENGTH_SHORT).show();
         }
     }
