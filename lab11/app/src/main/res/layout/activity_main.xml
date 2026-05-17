@@ -36,6 +36,13 @@
         android:text="Показать оценки"
         android:layout_marginTop="8dp" />
 
+    <Button
+        android:id="@+id/btnQuiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Открыть викторину"
+        android:layout_marginTop="8dp" />
+
     <ListView
         android:id="@+id/listDB"
         android:layout_width="match_parent"

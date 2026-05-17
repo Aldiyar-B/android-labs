@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Lab11</string>
+    <string name="map_hint">Нажмите на маркер, ответьте на вопрос и соберите все точки.</string>
+    <string name="place_image_description">Иллюстрация места вопроса</string>
 </resources>

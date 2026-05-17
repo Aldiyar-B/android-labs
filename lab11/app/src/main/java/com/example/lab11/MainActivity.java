@@ -1,6 +1,6 @@
 package com.example.lab11;
 
-
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private SQLiteDatabase database;
 
-    private Button btnStudents, btnSubjects, btnGrades;
+    private Button btnStudents, btnSubjects, btnGrades, btnQuiz;
     private ListView listDB;
 
     @Override
@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         btnStudents = findViewById(R.id.btnStudents);
         btnSubjects = findViewById(R.id.btnSubjects);
         btnGrades = findViewById(R.id.btnGrades);
+        btnQuiz = findViewById(R.id.btnQuiz);
+
         listDB = findViewById(R.id.listDB);
 
         dbHelper = new DBHelper(this);
@@ -37,17 +39,27 @@ public class MainActivity extends AppCompatActivity {
         btnStudents.setOnClickListener(v -> showStudents());
         btnSubjects.setOnClickListener(v -> showSubjects());
         btnGrades.setOnClickListener(v -> showGrades());
+
+        btnQuiz.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void showStudents() {
         ArrayList<HashMap<String, String>> data = new ArrayList<>();
 
-        Cursor cursor = database.rawQuery("SELECT name, group_name FROM students", null);
+        Cursor cursor = database.rawQuery(
+                "SELECT name, group_name FROM students",
+                null
+        );
 
         while (cursor.moveToNext()) {
             HashMap<String, String> item = new HashMap<>();
+
             item.put("title", cursor.getString(0));
             item.put("description", "Группа: " + cursor.getString(1));
+
             data.add(item);
         }
 
@@ -58,12 +70,17 @@ public class MainActivity extends AppCompatActivity {
     private void showSubjects() {
         ArrayList<HashMap<String, String>> data = new ArrayList<>();
 
-        Cursor cursor = database.rawQuery("SELECT subject_name, teacher FROM subjects", null);
+        Cursor cursor = database.rawQuery(
+                "SELECT subject_name, teacher FROM subjects",
+                null
+        );
 
         while (cursor.moveToNext()) {
             HashMap<String, String> item = new HashMap<>();
+
             item.put("title", cursor.getString(0));
             item.put("description", "Преподаватель: " + cursor.getString(1));
+
             data.add(item);
         }
 
@@ -81,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
         while (cursor.moveToNext()) {
             HashMap<String, String> item = new HashMap<>();
+
             item.put("title", cursor.getString(0));
             item.put(
                     "description",
                     cursor.getString(1) + " — оценка: " + cursor.getInt(2)
             );
+
             data.add(item);
         }
 
