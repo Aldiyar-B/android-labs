@@ -1,0 +1,147 @@
+package com.example.rgz;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.yandex.mapkit.Animation;
+import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.geometry.Point;
+import com.yandex.mapkit.map.CameraPosition;
+import com.yandex.mapkit.map.MapObject;
+import com.yandex.mapkit.map.MapObjectTapListener;
+import com.yandex.mapkit.map.PlacemarkMapObject;
+import com.yandex.mapkit.mapview.MapView;
+import com.yandex.runtime.image.ImageProvider;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+// ЛР10: карта со штаб-квартирами вендоров ИИ-инструментов и викториной (Yandex MapKit).
+public class MapsActivity extends AppCompatActivity {
+
+    public static final String EXTRA_PLACE_ID = "place_id";
+    public static final String PREFS_NAME = "quiz_progress";
+
+    private static final Place[] PLACES = {
+            new Place("openai", "OpenAI", 37.778500, -122.414800),
+            new Place("anthropic", "Anthropic", 37.791200, -122.396200),
+            new Place("github", "GitHub", 37.782000, -122.391700),
+            new Place("jetbrains", "JetBrains", 50.088000, 14.420800)
+    };
+
+    private final Map<String, PlacemarkMapObject> placemarks = new LinkedHashMap<>();
+    private final MapObjectTapListener markerTapListener = this::openQuiz;
+
+    private MapView mapView;
+    private TextView progressText;
+    private SharedPreferences progressPrefs;
+    private ImageProvider redMarkerIcon;
+    private ImageProvider greenMarkerIcon;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        mapView = findViewById(R.id.map_view);
+        progressText = findViewById(R.id.progress_text);
+        progressPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        redMarkerIcon = markerImageProvider(R.drawable.ic_marker_red);
+        greenMarkerIcon = markerImageProvider(R.drawable.ic_marker_green);
+
+        addMarkers();
+        moveCameraToStart();
+        refreshProgress();
+    }
+
+    @Override protected void onStart() {
+        super.onStart();
+        MapKitFactory.getInstance().onStart();
+        mapView.onStart();
+        refreshProgress();
+    }
+
+    @Override protected void onResume() { super.onResume(); refreshProgress(); }
+
+    @Override protected void onStop() {
+        mapView.onStop();
+        MapKitFactory.getInstance().onStop();
+        super.onStop();
+    }
+
+    private void addMarkers() {
+        com.yandex.mapkit.map.Map map = mapView.getMapWindow().getMap();
+        for (Place place : PLACES) {
+            PlacemarkMapObject placemark = map.getMapObjects().addPlacemark();
+            placemark.setGeometry(new Point(place.latitude, place.longitude));
+            placemark.setIcon(markerIcon(place.id));
+            placemark.setUserData(place.id);
+            placemark.setText(place.title);
+            placemark.addTapListener(markerTapListener);
+            placemarks.put(place.id, placemark);
+        }
+    }
+
+    private boolean openQuiz(MapObject mapObject, Point point) {
+        Object userData = mapObject.getUserData();
+        if (userData instanceof String) {
+            Intent intent = new Intent(this, QuizActivity.class);
+            intent.putExtra(EXTRA_PLACE_ID, (String) userData);
+            startActivity(intent);
+        }
+        return true;
+    }
+
+    private void moveCameraToStart() {
+        mapView.getMapWindow().getMap().move(
+                new CameraPosition(new Point(45.0, -40.0), 1.3f, 0.0f, 0.0f),
+                new Animation(Animation.Type.SMOOTH, 0.8f), null);
+    }
+
+    private void refreshProgress() {
+        if (progressText == null) return;
+        int completed = 0;
+        for (Place place : PLACES) {
+            if (isAnswered(place.id)) completed++;
+            PlacemarkMapObject pm = placemarks.get(place.id);
+            if (pm != null) pm.setIcon(markerIcon(place.id));
+        }
+        progressText.setText("Угадано вендоров: " + completed + " из " + PLACES.length);
+    }
+
+    private ImageProvider markerIcon(String placeId) {
+        return isAnswered(placeId) ? greenMarkerIcon : redMarkerIcon;
+    }
+
+    private ImageProvider markerImageProvider(int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(this, drawableId);
+        if (drawable == null) throw new IllegalStateException("Marker drawable not found");
+        int width = Math.max(drawable.getIntrinsicWidth(), 1);
+        int height = Math.max(drawable.getIntrinsicHeight(), 1);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return ImageProvider.fromBitmap(bitmap);
+    }
+
+    private boolean isAnswered(String placeId) {
+        return progressPrefs.getBoolean(placeId, false);
+    }
+
+    private static class Place {
+        final String id; final String title; final double latitude; final double longitude;
+        Place(String id, String title, double latitude, double longitude) {
+            this.id = id; this.title = title; this.latitude = latitude; this.longitude = longitude;
+        }
+    }
+}

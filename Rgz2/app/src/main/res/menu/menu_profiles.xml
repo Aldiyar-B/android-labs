@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/profile_novice" android:title="Профиль: Новичок" />
+    <item android:id="@+id/profile_team"   android:title="Профиль: Команда" />
+    <item android:id="@+id/profile_expert" android:title="Профиль: Эксперт" />
+</menu>

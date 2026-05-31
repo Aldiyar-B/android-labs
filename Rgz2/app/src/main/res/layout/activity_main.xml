@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="AI Dev Advisor" android:textSize="28sp" android:textStyle="bold" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Подбор ИИ-инструментов для веб-разработки"
+        android:textSize="15sp" android:gravity="center" android:layout_marginTop="6dp" />
+
+    <TextView android:id="@+id/toolsCount" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="В базе инструментов: 0" android:textSize="14sp"
+        android:layout_marginTop="4dp" android:layout_marginBottom="32dp" />
+
+    <Button android:id="@+id/btnSelect"  android:layout_width="260dp" android:layout_height="wrap_content" android:text="Подобрать инструмент" />
+    <Button android:id="@+id/btnCatalog" android:layout_width="260dp" android:layout_height="wrap_content" android:text="Каталог инструментов" android:layout_marginTop="12dp" />
+    <Button android:id="@+id/btnMap"     android:layout_width="260dp" android:layout_height="wrap_content" android:text="Карта вендоров" android:layout_marginTop="12dp" />
+</LinearLayout>
