@@ -1,7 +1,6 @@
 package com.example.lab13;
 
 import android.content.Context;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,71 +9,49 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-/**
- * Кастомный адаптер для отображения файлов и папок с иконками,
- * размером и датой изменения (усовершенствование по п.2 задания).
- */
-public class FileAdapter extends ArrayAdapter<File> {
+public class FileAdapter extends ArrayAdapter<FileItem> {
 
     private final LayoutInflater inflater;
-    private final SimpleDateFormat dateFormat =
-            new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
 
-    public FileAdapter(Context context, List<File> files) {
-        super(context, 0, files);
+    public FileAdapter(Context context, List<FileItem> items) {
+        super(context, 0, items);
         inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            view = inflater.inflate(R.layout.list_item_file, parent, false);
-        }
-
-        ImageView icon = view.findViewById(R.id.itemIcon);
-        TextView name = view.findViewById(R.id.itemName);
-        TextView info = view.findViewById(R.id.itemInfo);
-
-        File file = getItem(position);
-        if (file == null) return view;
-
-        name.setText(file.getName());
-
-        if (file.isDirectory()) {
-            icon.setImageResource(R.drawable.ic_folder);
-            File[] children = file.listFiles();
-            int count = children != null ? children.length : 0;
-            info.setText("Папка • элементов: " + count);
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.list_item_file, parent, false);
+            holder = new ViewHolder();
+            holder.icon = convertView.findViewById(R.id.itemIcon);
+            holder.name = convertView.findViewById(R.id.itemName);
+            holder.info = convertView.findViewById(R.id.itemInfo);
+            holder.action = convertView.findViewById(R.id.itemAction);
+            convertView.setTag(holder);
         } else {
-            icon.setImageResource(getIconForFile(file.getName()));
-            String size = Formatter.formatShortFileSize(getContext(), file.length());
-            String date = dateFormat.format(new Date(file.lastModified()));
-            info.setText(size + " • " + date);
+            holder = (ViewHolder) convertView.getTag();
         }
-        return view;
+
+        FileItem item = getItem(position);
+        if (item != null) {
+            holder.icon.setImageResource(item.getIconResId());
+            holder.name.setText(item.getName());
+            holder.info.setText(item.getInfo(getContext()));
+            holder.action.setText(item.isDirectory() ? "Перейти" : "Открыть");
+        }
+        return convertView;
     }
 
-    // Подбор иконки по расширению файла
-    private int getIconForFile(String fileName) {
-        String lower = fileName.toLowerCase(Locale.getDefault());
-        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")
-                || lower.endsWith(".png") || lower.endsWith(".gif")
-                || lower.endsWith(".webp") || lower.endsWith(".bmp")) {
-            return R.drawable.ic_image;
-        }
-        if (lower.endsWith(".txt") || lower.endsWith(".doc")
-                || lower.endsWith(".docx") || lower.endsWith(".pdf")) {
-            return R.drawable.ic_text;
-        }
-        return R.drawable.ic_file;
+    private static class ViewHolder {
+        ImageView icon;
+        TextView name;
+        TextView info;
+        TextView action;
     }
 }

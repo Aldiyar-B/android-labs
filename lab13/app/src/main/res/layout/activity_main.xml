@@ -1,34 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="16dp"
-    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Наверх" />
-
     <TextView
-        android:id="@+id/tvCurrentPath"
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Путь: "
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:paddingBottom="8dp" />
+        android:text="Демо-файлы"
+        android:textColor="@color/primary_text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="start"
+        android:singleLine="true"
+        android:text="/"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDemo"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="Демо"
+            android:textSize="12sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnStorage"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Память"
+            android:textSize="12sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Наверх"
+            android:textSize="12sp"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/search_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Поиск по имени"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textColor="@color/primary_text"
+            android:textColorHint="@color/secondary_text"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="54dp"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:minWidth="0dp"
+            android:text="×"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Папок: 0  Файлов: 0"
+        android:textColor="@color/secondary_text"
+        android:textSize="13sp" />
 
     <ListView
         android:id="@+id/listViewFiles"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#E0E0E0"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:background="@color/surface"
+        android:divider="@color/divider"
         android:dividerHeight="1dp" />
+
 </LinearLayout>

@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:paddingStart="4dp"
-    android:paddingEnd="4dp">
+    android:paddingEnd="12dp"
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/itemIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="12dp"
-        android:contentDescription="Иконка" />
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:contentDescription="Иконка файла" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/itemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:textColor="#212121"
+            android:ellipsize="end"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/itemInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="#757575" />
+            android:layout_marginTop="2dp"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/itemAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Открыть"
+        android:textColor="@color/accent"
+        android:textSize="12sp" />
+
 </LinearLayout>

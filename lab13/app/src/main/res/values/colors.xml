@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background">#F7F8FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="primary_text">#202124</color>
+    <color name="secondary_text">#6F7378</color>
+    <color name="accent">#3F6FD8</color>
+    <color name="divider">#E4E7EB</color>
+    <color name="file_badge">#3F6FD8</color>
+    <color name="item_stroke">#E4E7EB</color>
+    <color name="navy">#202124</color>
+    <color name="navy_light">#34373B</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
